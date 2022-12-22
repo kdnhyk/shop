@@ -1,69 +1,123 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import AppLayout from "../../components/layout/AppLayout";
+import { IsProduct } from "../../type";
+import { IsSize } from "../../type";
 
 const ProductsBlock = styled.div`
-  img {
-    width: 100%;
-    height: auto;
-  }
-  h1 {
-    margin-bottom: 8px;
-  }
-  .SizeSelector {
-    display: flex;
-    button {
-      width: 100px;
-      height: 40px;
-      background: white;
-      outline: 1px solid black;
-      cursor: pointer;
-      &:hover {
-        /* background: grey; */
-      }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  .SortWrapper {
+    span {
+      font-size: 14px;
+    }
+    .ProductName {
+      text-decoration: underline;
     }
   }
+
+  .ImageWrapper {
+    width: 100%;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .TextWrapper {
+    margin-bottom: 12px;
+    h1 {
+      font-weight: 400;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .Price {
+    }
+  }
+
+  .SizeSelector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 60px;
+    // SizeButton
+  }
   .BottomBar {
-    width: calc(100% - 30px);
+    width: 100%;
     height: 60px;
+    background: white;
     position: fixed;
     bottom: 0;
+    left: 0;
     padding: 10px;
     display: flex;
     gap: 20px;
     button {
-      border-radius: 2px;
+      border-radius: 4px;
       font-size: 14px;
       cursor: pointer;
     }
     .ScrapBtn {
       width: 120px;
       background: white;
-      outline: 1px solid black;
+      border: 1px solid black;
     }
-    .CartBtn {
-      background: black;
-      color: white;
-    }
+    // CartButton
   }
 `;
 
+const SizeButton = styled.button<{ isSelected: boolean }>`
+  width: 90px;
+  height: 40px;
+  background: white;
+  outline: ${({ isSelected }) =>
+    isSelected ? "1px solid black" : "1px solid #D9D9D9"};
+  cursor: pointer;
+  &:hover {
+    /* background: grey; */
+  }
+`;
+
+const CartButton = styled.button<{ isActivated: boolean }>`
+  width: 100%;
+  border: 1px solid black;
+  background: ${({ isActivated }) => (isActivated ? "black" : "white")};
+  color: ${({ isActivated }) => (isActivated ? "white" : "black")};
+`;
+
 export default function Products() {
-  const { id, name, price } = { id: 0, name: "name", price: 39000 };
-  type IsSize = "s" | "m" | "l" | "xl";
-  const [size, setSize] = useState<IsSize>();
-  console.log("size: " + size);
+  const { id } = useRouter().query;
+  const [product, setProduct] = useState<IsProduct>();
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const res = await fetch(`/api/products/${id}`);
+      if (res.ok) {
+        const products = await res.json();
+        console.log(products[0]);
+        setProduct(products[0]);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  const [currentSize, setCurrentSize] = useState<IsSize>();
   const onClickSizeBtn = (e: any) => {
     const { name } = e.target;
     console.log(name);
-    setSize(() => name);
+    setCurrentSize(() => name);
   };
-  const onClickCartBtn = () => {
-    localStorage.setItem("cart", "0");
+  const onClickCart = () => {
+    if (!currentSize) {
+      alert("사이즈를 선택하지 않았습니다");
+      return;
+    }
+    // localStorage.setItem("cart", "0");
   };
 
+  if (!product) return;
   return (
     <>
       <Head>
@@ -73,21 +127,49 @@ export default function Products() {
       </Head>
       <AppLayout>
         <ProductsBlock>
-          <span>{"TEE > "}</span>
-          <span>NAME</span>
-          <Image alt="" src={""}></Image>
-          <h1>{"name"}</h1>
+          <div className="SortWrapper">
+            <span>{"TEE > "}</span>
+            <span className="ProductName">{product.name}</span>
+          </div>
+
+          <div className="ImageWrapper">
+            <Image
+              alt={product.name}
+              src={product.src}
+              width={400}
+              height={400}
+            ></Image>
+          </div>
+          <div className="TextWrapper">
+            <h1>{product.name}</h1>
+            <p className="Price">
+              {product.price.toLocaleString("ko-KR", {
+                maximumFractionDigits: 4,
+              }) + " 원"}
+            </p>
+          </div>
+
           <div className="SizeSelector">
-            <button name="s" onClick={onClickSizeBtn}>
-              S
-            </button>
-            <button name="m">M</button>
-            <button name="l">L</button>
-            <button name="xl">XL</button>
+            {product.currentSize.map((size) => (
+              <SizeButton
+                key={size}
+                name={size}
+                isSelected={size === currentSize ? true : false}
+                onClick={onClickSizeBtn}
+              >
+                {size.toUpperCase()}
+              </SizeButton>
+            ))}
           </div>
           <div className="BottomBar">
             <button className="ScrapBtn">scrap</button>
-            <button className="CartBtn">cart</button>
+            <CartButton
+              className="CartBtn"
+              isActivated={currentSize ? true : false}
+              onClick={onClickCart}
+            >
+              cart
+            </CartButton>
           </div>
         </ProductsBlock>
       </AppLayout>

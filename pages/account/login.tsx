@@ -53,6 +53,9 @@ export default function Login() {
     console.log(name + ": " + value);
     setLoginInput({ ...loginInput, [name]: value });
   };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   return (
     <>
       <Head>
@@ -63,7 +66,7 @@ export default function Login() {
       <AppLayout>
         <LoginBlock>
           <h1>Login</h1>
-          <form className="LoginForm">
+          <form className="LoginForm" onSubmit={onSubmit}>
             <input
               type="email"
               name="email"

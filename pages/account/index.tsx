@@ -13,15 +13,15 @@ const LoginBlock = styled.div<IsLoginBlock>``;
 export default function Login() {
   const router = useRouter();
 
-  useEffect(() => {
-    if (window.location.href.includes("access_token")) {
-      window.localStorage.setItem(
-        "token",
-        window.location.href.split("=")[1].split("&")[0] ?? "none"
-      );
-      router.push("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.location.href.includes("access_token")) {
+  //     window.localStorage.setItem(
+  //       "token",
+  //       window.location.href.split("=")[1].split("&")[0] ?? "none"
+  //     );
+  //     router.push("/");
+  //   }
+  // }, []);
 
   const [a, b] = useRecoilState(authSelector);
   console.log(a);
