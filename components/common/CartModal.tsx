@@ -1,5 +1,9 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { cartSelector } from "../../store/cart";
+import ProductInCart from "./ProductInCart";
 
 const CartModalBlock = styled.div`
   width: 300px;
@@ -25,9 +29,14 @@ const CartModalBlock = styled.div`
     }
   }
   .Cart {
-    padding: 15px 15px 0 0;
+    padding: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     span {
       font-weight: 200;
+    }
+    .EmptyText {
     }
   }
 `;
@@ -37,6 +46,18 @@ interface IsCartModal {
 }
 
 export default function CartModal({ closeCart }: IsCartModal) {
+  const [cart, setCart] = useRecoilState(cartSelector);
+  useEffect(() => {
+    console.log(cart);
+  }, [cart]);
+  const removeProduct = (id: string) => {
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cart.filter((item) => item.id !== id))
+    );
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
     <CartModalBlock>
       <div className="Header">
@@ -46,7 +67,24 @@ export default function CartModal({ closeCart }: IsCartModal) {
         </span>
       </div>
       <div className="Cart">
-        <span>Your cart is currently empty.</span>
+        {cart.length !== 0 ? (
+          cart.map((product) => {
+            return (
+              <ProductInCart
+                key={product.id + product.currentSize[0]}
+                id={product.id}
+                quantity={product.quantity}
+                src={product.src}
+                name={product.name}
+                price={product.price}
+                currentSize={product.currentSize}
+                removeProduct={() => removeProduct(product.id)}
+              />
+            );
+          })
+        ) : (
+          <span className="EmptyText">Your cart is currently empty.</span>
+        )}
       </div>
     </CartModalBlock>
   );

@@ -2,10 +2,13 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import QuantityButton from "../../components/common/QuantityButton";
 import AppLayout from "../../components/layout/AppLayout";
+import { cartSelector } from "../../store/cart";
 import { IsProduct } from "../../type";
-import { IsSize } from "../../type";
+import { IsSize, IsProductInCart } from "../../type";
 
 const ProductsBlock = styled.div`
   display: flex;
@@ -42,8 +45,13 @@ const ProductsBlock = styled.div`
   .SizeSelector {
     display: flex;
     gap: 12px;
-    margin-bottom: 60px;
+    margin-bottom: 4px;
     // SizeButton
+  }
+
+  .QuantityButtonWrapper {
+    height: 30px;
+    margin-bottom: 60px;
   }
   .BottomBar {
     width: 100%;
@@ -55,6 +63,7 @@ const ProductsBlock = styled.div`
     padding: 10px;
     display: flex;
     gap: 20px;
+    z-index: 1;
     button {
       border-radius: 4px;
       font-size: 14px;
@@ -109,13 +118,34 @@ export default function Products() {
     console.log(name);
     setCurrentSize(() => name);
   };
+  const [cart, setCart] = useRecoilState(cartSelector);
+  const router = useRouter();
   const onClickCart = () => {
     if (!currentSize) {
       alert("사이즈를 선택하지 않았습니다");
       return;
     }
-    // localStorage.setItem("cart", "0");
+    if (!product) return;
+    if (
+      cart.find(
+        (product) => product.id === id && product.currentSize[0] === currentSize
+      )
+    ) {
+      alert("카트에 있는 상품입니다!");
+      return;
+    }
+    const newProduct: IsProductInCart = {
+      id: product.id,
+      src: product.src,
+      name: product.name,
+      price: product.price,
+      currentSize: [currentSize],
+      quantity: 1,
+    };
+    localStorage.setItem("cart", JSON.stringify([...cart, newProduct]));
+    router.reload();
   };
+  const onClickScrap = () => {};
 
   if (!product) return;
   return (
@@ -161,8 +191,19 @@ export default function Products() {
               </SizeButton>
             ))}
           </div>
+
+          <div className="QuantityButtonWrapper">
+            {currentSize && (
+              <QuantityButton
+                maxQuantity={3}
+                removeItem={() => setCurrentSize(undefined)}
+              />
+            )}
+          </div>
           <div className="BottomBar">
-            <button className="ScrapBtn">scrap</button>
+            <button className="ScrapBtn" onClick={onClickScrap}>
+              scrap
+            </button>
             <CartButton
               className="CartBtn"
               isActivated={currentSize ? true : false}

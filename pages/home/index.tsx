@@ -38,6 +38,7 @@ export default function Home() {
             src={product.src}
             name={product.name}
             price={product.price}
+            currentSize={[]}
           />
         ))}
       </div>

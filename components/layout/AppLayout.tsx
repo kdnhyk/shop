@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CartModal from "../common/CartModal";
 import Header from "../common/Header";
@@ -11,7 +11,7 @@ interface IsAppLayoutBlock {
 }
 
 const AppLayoutBlock = styled.div<IsAppLayoutBlock>`
-  width: calc(100% + 600px);
+  width: calc(100vw + 600px);
   height: ${({ vh }) => `calc(${vh}px * 100)`};
   margin-left: ${({ isOpenNav }) => isOpenNav && "300px"};
   transition: all 0.2s ease-in-out;
@@ -25,8 +25,8 @@ const AppLayoutBlock = styled.div<IsAppLayoutBlock>`
   }
   .Main {
     width: 100vw;
-    height: 100vh;
     .Wrapper {
+      width: 100vw;
       padding: 15px;
     }
   }
@@ -46,7 +46,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
   const [isOpenCart, setIsOpenCart] = useState(false);
   const setCart = () => {
-    console.log("Open Cart");
     setIsOpenCart((prev) => !prev);
   };
   const closeModal = () => {

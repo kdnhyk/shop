@@ -7,10 +7,6 @@ export const naverLogout = () => {
   window.location.reload();
 };
 
-interface IsNaverLogin {
-  setGetToken: any;
-}
-
 export default function NaverLogin() {
   const [, setUserInfo] = useRecoilState(authSelector);
 
@@ -38,7 +34,7 @@ export default function NaverLogin() {
     // if (!location.hash) return;
     // const token = location.hash.split("=")[1].split("&")[0];
     // localStorage.setItem("access_token", token);
-  }, []);
+  }, [setUserInfo]);
 
   return <div id="naverIdLogin"></div>;
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { IsProduct } from "../../type";
 
 const ProductBlock = styled.div`
   a {
@@ -25,13 +26,6 @@ const ProductBlock = styled.div`
     }
   }
 `;
-
-interface IsProduct {
-  id: number;
-  src: string;
-  name: string;
-  price: number;
-}
 
 export default function Product({ id, src, name, price }: IsProduct) {
   return (

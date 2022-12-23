@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { cartSelector } from "../../store/cart";
 import NavModal from "./NavModal";
 
 interface IsHeaderBlock {}
@@ -16,6 +18,13 @@ const HeaderBlock = styled.header<IsHeaderBlock>`
   }
   .CartArea {
     cursor: pointer;
+    position: relative;
+    span {
+      position: absolute;
+      top: 0;
+      right: -7px;
+      font-size: 14px;
+    }
   }
 `;
 
@@ -25,6 +34,7 @@ interface IsHeader extends IsHeaderBlock {
 }
 
 export default function Header({ openNav, openCart }: IsHeader) {
+  const [cart] = useRecoilState(cartSelector);
   return (
     <HeaderBlock>
       <div className="BurgerArea" onClick={openNav}>
@@ -54,6 +64,7 @@ export default function Header({ openNav, openCart }: IsHeader) {
             fill="black"
           />
         </svg>
+        <span>{cart.length === 0 ? "" : cart.length}</span>
       </div>
     </HeaderBlock>
   );
