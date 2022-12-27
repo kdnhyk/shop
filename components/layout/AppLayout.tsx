@@ -61,7 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const localCart = localStorage.getItem("cart");
     if (localCart === null) return;
     setCart(JSON.parse(localCart));
-  }, [cart]);
+  }, []);
 
   return (
     <AppLayoutBlock vh={vh} isOpenNav={isOpenNav} isOpenCart={isOpenCart}>
