@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import useCart from "../../hooks/useCart";
 import { IsProductInCart } from "../../type";
 import QuantityButton from "./QuantityButton";
 
@@ -50,9 +51,7 @@ const ProductInCartBlock = styled.div`
   }
 `;
 
-interface IsProductInCartProps extends IsProductInCart {
-  removeProduct: () => void;
-}
+interface IsProductInCartProps extends IsProductInCart {}
 export default function ProductInCart({
   id,
   src,
@@ -60,9 +59,12 @@ export default function ProductInCart({
   price,
   currentSize,
   quantity,
-  removeProduct,
 }: IsProductInCartProps) {
   const [currentQuantity, setcurrnetQuantity] = useState(quantity);
+  const { removeItem, updateQuantity } = useCart();
+  useEffect(() => {
+    updateQuantity(id, currentQuantity);
+  }, [currentQuantity, id, updateQuantity]);
 
   return (
     <ProductInCartBlock>
@@ -83,7 +85,7 @@ export default function ProductInCart({
         <div className="QuantityAndPrice">
           <QuantityButton
             maxQuantity={3}
-            removeItem={removeProduct}
+            removeItem={() => removeItem(id)}
             quantity={currentQuantity}
             setQuantity={setcurrnetQuantity}
           />

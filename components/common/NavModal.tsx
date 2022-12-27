@@ -21,21 +21,20 @@ export default function NavModal() {
   return (
     <NavModalBlock>
       <Link href={"/"}>SHOP</Link>
-      <Link href={"/lookbook"}>LOOKBOOK</Link>
+      {/* <Link href={"/lookbook"}>LOOKBOOK</Link> */}
       <Link href={"/about"}>ABOUT</Link>
-      <Link href={"/stocklists"}>STOCKLISTS</Link>
       <Link className="SubNav" href={"/account/login"}>
         LOG IN
       </Link>
       <Link className="SubNav" href={"/account/register"}>
         CREATE ACCOUNT
       </Link>
-      <Link className="SubNav" href={"/faqs"}>
+      {/* <Link className="SubNav" href={"/faqs"}>
         FAQS
-      </Link>
-      <Link className="SubNav" href={"/"}>
+      </Link> */}
+      {/* <Link className="SubNav" href={"/"}>
         TEAMS & CONDITIONS
-      </Link>
+      </Link> */}
       <Link className="SubNav" href={"/"}>
         INSTAGRAM
       </Link>

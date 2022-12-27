@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import QuantityButton from "../../components/common/QuantityButton";
 import AppLayout from "../../components/layout/AppLayout";
+import useCart from "../../hooks/useCart";
 import { cartSelector } from "../../store/cart";
 import { IsProduct } from "../../type";
 import { IsSize, IsProductInCart } from "../../type";
@@ -13,68 +14,81 @@ import { IsSize, IsProductInCart } from "../../type";
 const ProductsBlock = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  .SortWrapper {
-    span {
-      font-size: 14px;
+  gap: 20px;
+  @media (min-width: 605px) {
+    flex-direction: row;
+    .LeftArea {
+      width: 50%;
     }
-    .ProductName {
-      text-decoration: underline;
+    .RightArea {
+      padding: 20px 0;
     }
   }
+  .LeftArea {
+    .SortWrapper {
+      span {
+        font-size: 14px;
+      }
+      .ProductName {
+        text-decoration: underline;
+      }
+    }
 
-  .ImageWrapper {
-    width: 100%;
-    img {
+    .ImageWrapper {
       width: 100%;
-      height: auto;
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 
-  .TextWrapper {
-    margin-bottom: 12px;
-    h1 {
-      font-weight: 400;
-      font-size: 24px;
-      margin-bottom: 8px;
+  .RightArea {
+    .TextWrapper {
+      margin-bottom: 20px;
+      h1 {
+        font-weight: 400;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .Price {
+      }
     }
-    .Price {
-    }
-  }
 
-  .SizeSelector {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 4px;
-    // SizeButton
-  }
-
-  .QuantityButtonWrapper {
-    height: 30px;
-    margin-bottom: 60px;
-  }
-  .BottomBar {
-    width: 100%;
-    height: 60px;
-    background: white;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    padding: 10px;
-    display: flex;
-    gap: 20px;
-    z-index: 1;
-    button {
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
+    .SizeSelector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      // SizeButton
     }
-    .ScrapBtn {
-      width: 120px;
+
+    .QuantityButtonWrapper {
+      height: 30px;
+      margin-bottom: 60px;
+    }
+    .BottomBar {
+      width: 100%;
+      height: 60px;
       background: white;
-      border: 1px solid black;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+      display: flex;
+      gap: 20px;
+      z-index: 1;
+      button {
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .ScrapBtn {
+        width: 120px;
+        background: white;
+        border: 1px solid black;
+      }
+      // CartButton
     }
-    // CartButton
   }
 `;
 
@@ -100,6 +114,7 @@ const CartButton = styled.button<{ isActivated: boolean }>`
 export default function Products() {
   const { id } = useRouter().query;
   const [product, setProduct] = useState<IsProduct>();
+  const { cart, addItem } = useCart();
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch(`/api/products/${id}`);
@@ -120,7 +135,7 @@ export default function Products() {
   };
 
   const [quantity, setQuantity] = useState(1);
-  const [cart, setCart] = useRecoilState(cartSelector);
+
   const router = useRouter();
   const onClickCart = () => {
     if (!currentSize) {
@@ -144,7 +159,7 @@ export default function Products() {
       currentSize: [currentSize],
       quantity: quantity,
     };
-    localStorage.setItem("cart", JSON.stringify([...cart, newProduct]));
+    addItem(newProduct);
     router.reload();
   };
   const onClickScrap = () => {};
@@ -159,62 +174,66 @@ export default function Products() {
       </Head>
       <AppLayout>
         <ProductsBlock>
-          <div className="SortWrapper">
-            <span>{"TEE > "}</span>
-            <span className="ProductName">{product.name}</span>
-          </div>
+          <div className="LeftArea">
+            <div className="SortWrapper">
+              <span>{"TEE > "}</span>
+              <span className="ProductName">{product.name}</span>
+            </div>
 
-          <div className="ImageWrapper">
-            <Image
-              alt={product.name}
-              src={product.src}
-              width={400}
-              height={400}
-            ></Image>
+            <div className="ImageWrapper">
+              <Image
+                alt={product.name}
+                src={product.src}
+                width={400}
+                height={400}
+              ></Image>
+            </div>
           </div>
-          <div className="TextWrapper">
-            <h1>{product.name}</h1>
-            <p className="Price">
-              {product.price.toLocaleString("ko-KR", {
-                maximumFractionDigits: 4,
-              }) + " 원"}
-            </p>
-          </div>
+          <div className="RightArea">
+            <div className="TextWrapper">
+              <h1>{product.name}</h1>
+              <p className="Price">
+                {product.price.toLocaleString("ko-KR", {
+                  maximumFractionDigits: 4,
+                }) + " 원"}
+              </p>
+            </div>
 
-          <div className="SizeSelector">
-            {product.currentSize.map((size) => (
-              <SizeButton
-                key={size}
-                name={size}
-                isSelected={size === currentSize ? true : false}
-                onClick={onClickSizeBtn}
+            <div className="SizeSelector">
+              {product.currentSize.map((size) => (
+                <SizeButton
+                  key={size}
+                  name={size}
+                  isSelected={size === currentSize ? true : false}
+                  onClick={onClickSizeBtn}
+                >
+                  {size.toUpperCase()}
+                </SizeButton>
+              ))}
+            </div>
+
+            <div className="QuantityButtonWrapper">
+              {currentSize && (
+                <QuantityButton
+                  maxQuantity={3}
+                  removeItem={() => setCurrentSize(undefined)}
+                  quantity={quantity}
+                  setQuantity={setQuantity}
+                />
+              )}
+            </div>
+            <div className="BottomBar">
+              <button className="ScrapBtn" onClick={onClickScrap}>
+                scrap
+              </button>
+              <CartButton
+                className="CartBtn"
+                isActivated={currentSize ? true : false}
+                onClick={onClickCart}
               >
-                {size.toUpperCase()}
-              </SizeButton>
-            ))}
-          </div>
-
-          <div className="QuantityButtonWrapper">
-            {currentSize && (
-              <QuantityButton
-                maxQuantity={3}
-                removeItem={() => setCurrentSize(undefined)}
-                quantity={quantity}
-                setQuantity={setQuantity}
-              />
-            )}
-          </div>
-          <div className="BottomBar">
-            <button className="ScrapBtn" onClick={onClickScrap}>
-              scrap
-            </button>
-            <CartButton
-              className="CartBtn"
-              isActivated={currentSize ? true : false}
-              onClick={onClickCart}
-            >
-              cart
-            </CartButton>
+                cart
+              </CartButton>
+            </div>
           </div>
         </ProductsBlock>
       </AppLayout>

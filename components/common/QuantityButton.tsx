@@ -35,6 +35,7 @@ export default function QuantityButton({
   setQuantity,
 }: IsQuantityButton) {
   const onDecrease = () => {
+    console.log(quantity);
     if (quantity <= 1) {
       removeItem();
     }

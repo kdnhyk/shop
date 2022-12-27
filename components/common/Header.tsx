@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { useRecoilState } from "recoil";
+import Link from "next/link";
 import styled from "styled-components";
-import { cartSelector } from "../../store/cart";
-import { IsProductInCart } from "../../type";
-import NavModal from "./NavModal";
+import useCart from "../../hooks/useCart";
 
 interface IsHeaderBlock {}
 
@@ -16,6 +13,8 @@ const HeaderBlock = styled.header<IsHeaderBlock>`
   justify-content: space-between;
   .BurgerArea {
     cursor: pointer;
+  }
+  .Logo {
   }
   .CartArea {
     cursor: pointer;
@@ -32,10 +31,11 @@ const HeaderBlock = styled.header<IsHeaderBlock>`
 interface IsHeader extends IsHeaderBlock {
   openNav: () => void;
   openCart: () => void;
-  cart: IsProductInCart[];
 }
 
-export default function Header({ openNav, openCart, cart }: IsHeader) {
+export default function Header({ openNav, openCart }: IsHeader) {
+  const { cart } = useCart();
+
   return (
     <HeaderBlock>
       <div className="BurgerArea" onClick={openNav}>
@@ -52,6 +52,20 @@ export default function Header({ openNav, openCart, cart }: IsHeader) {
           />
         </svg>
       </div>
+      <Link href={"/"} className="Logo">
+        <svg
+          width="143"
+          height="35"
+          viewBox="0 0 143 35"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.604 34H0.64V0.999997H17.756C20.924 0.999997 23.1827 1.616 24.532 2.848C25.8813 4.08 26.556 5.86933 26.556 8.216C26.556 10.592 26.1307 12.4253 25.28 13.716C24.4293 14.9773 23.2707 15.8133 21.804 16.224V16.532C26.0573 17.2653 28.184 20.1693 28.184 25.244C28.184 27.884 27.48 30.0107 26.072 31.624C24.6933 33.208 22.5373 34 19.604 34ZM15.336 20.844H11.2V26.256H15.248C16.744 26.256 17.492 25.3467 17.492 23.528C17.492 21.7387 16.7733 20.844 15.336 20.844ZM14.544 8.216H11.2V13.144H14.456C15.8053 13.144 16.48 12.3227 16.48 10.68C16.48 9.03733 15.8347 8.216 14.544 8.216ZM52.9983 25.552H42.4383V0.999997H31.8783V34H52.9983V25.552ZM64.9618 28.764H73.6738L74.9058 34H86.0378L77.5018 0.999997H61.1778L52.6418 34H63.7738L64.9618 28.764ZM69.6258 11.12L71.7378 20.36H66.8978L69.0538 11.12H69.6258ZM109.993 24.54L110.785 33.428C108.527 34.3373 105.74 34.792 102.425 34.792C99.2867 34.792 96.6907 34.4547 94.6374 33.78C92.5841 33.076 90.9561 32.02 89.7534 30.612C88.5507 29.204 87.7001 27.4147 87.2014 25.244C86.7321 23.0733 86.4974 20.5067 86.4974 17.544C86.4974 14.6693 86.7174 12.1613 87.1574 10.02C87.6267 7.84933 88.4481 6.04533 89.6214 4.608C90.7947 3.14133 92.3787 2.04133 94.3734 1.308C96.3974 0.574666 98.9494 0.208 102.029 0.208C102.704 0.208 103.452 0.251999 104.273 0.339998C105.124 0.398666 105.945 0.486665 106.737 0.603997C107.559 0.721331 108.321 0.867998 109.025 1.044C109.759 1.19067 110.345 1.36667 110.785 1.572L109.201 9.668C106.855 9.16933 104.757 8.92 102.909 8.92C101.003 8.92 99.6827 9.096 98.9494 9.448C98.2161 9.8 97.8494 10.504 97.8494 11.56V25.376C98.5241 25.5227 99.1987 25.64 99.8734 25.728C100.577 25.7867 101.296 25.816 102.029 25.816C104.963 25.816 107.617 25.3907 109.993 24.54ZM125.244 19.656H125.024V34H114.464V0.999997H125.024V14.464H125.244C125.274 13.936 125.332 13.4667 125.42 13.056C125.508 12.616 125.626 12.2347 125.772 11.912L130.92 0.999997H142.36L134.44 17.192L142.624 34H131.184L125.772 22.164C125.626 21.8413 125.508 21.4747 125.42 21.064C125.332 20.6533 125.274 20.184 125.244 19.656Z"
+            fill="black"
+          />
+        </svg>
+      </Link>
       <div className="CartArea" onClick={openCart}>
         <svg
           width="20"

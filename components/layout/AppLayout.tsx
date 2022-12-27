@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import useCart from "../../hooks/useCart";
 import { IsProductInCart } from "../../type";
 import CartModal from "../common/CartModal";
 import Header from "../common/Header";
@@ -21,6 +22,8 @@ const AppLayoutBlock = styled.div<IsAppLayoutBlock>`
   left: -300px;
   left: ${({ isOpenCart }) => isOpenCart && "-600px"};
   overflow-x: hidden;
+  overflow-y: ${({ isOpenNav, isOpenCart }) =>
+    isOpenNav || isOpenCart ? "hidden" : "auto"};
   .NavModalWrapper {
     position: relative;
   }
@@ -29,6 +32,16 @@ const AppLayoutBlock = styled.div<IsAppLayoutBlock>`
     .Wrapper {
       width: 100vw;
       padding: 15px;
+    }
+    .Blur {
+      position: absolute;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      opacity: 0;
+      display: ${({ isOpenNav, isOpenCart }) =>
+        isOpenNav || isOpenCart ? "block" : "none"};
     }
   }
   .CartModalWrapper {
@@ -56,24 +69,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const [cart, setCart] = useState<IsProductInCart[]>([]);
-  useEffect(() => {
-    const localCart = localStorage.getItem("cart");
-    if (localCart === null) return;
-    setCart(JSON.parse(localCart));
-  }, []);
-
   return (
     <AppLayoutBlock vh={vh} isOpenNav={isOpenNav} isOpenCart={isOpenCart}>
       <div className="NavModalWrapper">
         <NavModal />
       </div>
       <main className="Main" onClick={closeModal}>
-        <Header openNav={setNav} openCart={onChangeCart} cart={cart} />
+        <Header openNav={setNav} openCart={onChangeCart} />
         <div className="Wrapper">{children}</div>
+        <div className="Blur"></div>
       </main>
       <div className="CartModalWrapper">
-        <CartModal closeCart={onChangeCart} cart={cart} setCart={setCart} />
+        <CartModal closeCart={onChangeCart} />
       </div>
     </AppLayoutBlock>
   );

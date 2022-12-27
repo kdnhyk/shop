@@ -10,6 +10,15 @@ const HomeBlock = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    @media (min-width: 605px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media (min-width: 885px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    @media (min-width: 1165px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
   }
 `;
 

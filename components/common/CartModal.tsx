@@ -1,9 +1,5 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { cartSelector } from "../../store/cart";
-import { IsProductInCart } from "../../type";
+import useCart from "../../hooks/useCart";
 import ProductInCart from "./ProductInCart";
 
 const CartModalBlock = styled.div`
@@ -63,18 +59,10 @@ const CartModalBlock = styled.div`
 
 interface IsCartModal {
   closeCart: () => void;
-  cart: IsProductInCart[];
-  setCart: React.Dispatch<React.SetStateAction<IsProductInCart[]>>;
 }
 
-export default function CartModal({ closeCart, cart, setCart }: IsCartModal) {
-  const removeProduct = (id: string) => {
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cart.filter((item) => item.id !== id))
-    );
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+export default function CartModal({ closeCart }: IsCartModal) {
+  const { cart } = useCart();
 
   return (
     <CartModalBlock>
@@ -97,7 +85,6 @@ export default function CartModal({ closeCart, cart, setCart }: IsCartModal) {
                   name={product.name}
                   price={product.price}
                   currentSize={product.currentSize}
-                  removeProduct={() => removeProduct(product.id)}
                 />
               );
             })}
