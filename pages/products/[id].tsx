@@ -2,12 +2,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import QuantityButton from "../../components/common/QuantityButton";
 import AppLayout from "../../components/layout/AppLayout";
 import useCart from "../../hooks/useCart";
-import { cartSelector } from "../../store/cart";
 import { IsProduct } from "../../type";
 import { IsSize, IsProductInCart } from "../../type";
 
@@ -17,15 +14,21 @@ const ProductsBlock = styled.div`
   gap: 20px;
   @media (min-width: 605px) {
     flex-direction: row;
+    justify-content: center;
     .LeftArea {
       width: 50%;
+      max-width: 540px;
+      height: auto;
     }
     .RightArea {
+      width: 50%;
+      max-width: 540px;
       padding: 20px 0;
     }
   }
   .LeftArea {
     .SortWrapper {
+      margin-bottom: 4px;
       span {
         font-size: 14px;
       }
@@ -44,12 +47,16 @@ const ProductsBlock = styled.div`
   }
 
   .RightArea {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     .TextWrapper {
-      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       h1 {
         font-weight: 400;
         font-size: 24px;
-        margin-bottom: 10px;
       }
       .Price {
       }
@@ -58,36 +65,12 @@ const ProductsBlock = styled.div`
     .SizeSelector {
       display: flex;
       gap: 12px;
-      margin-bottom: 10px;
       // SizeButton
     }
+    // CartButton
 
-    .QuantityButtonWrapper {
-      height: 30px;
-      margin-bottom: 60px;
-    }
-    .BottomBar {
-      width: 100%;
-      height: 60px;
-      background: white;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
-      display: flex;
-      gap: 20px;
-      z-index: 1;
-      button {
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
-      }
-      .ScrapBtn {
-        width: 120px;
-        background: white;
-        border: 1px solid black;
-      }
-      // CartButton
+    .Description {
+      font-size: 13px;
     }
   }
 `;
@@ -96,7 +79,7 @@ const SizeButton = styled.button<{ isSelected: boolean }>`
   width: 90px;
   height: 40px;
   background: white;
-  outline: ${({ isSelected }) =>
+  border: ${({ isSelected }) =>
     isSelected ? "1px solid black" : "1px solid #D9D9D9"};
   cursor: pointer;
   &:hover {
@@ -106,9 +89,12 @@ const SizeButton = styled.button<{ isSelected: boolean }>`
 
 const CartButton = styled.button<{ isActivated: boolean }>`
   width: 100%;
+  height: 40px;
   border: 1px solid black;
   background: ${({ isActivated }) => (isActivated ? "black" : "white")};
   color: ${({ isActivated }) => (isActivated ? "white" : "black")};
+  font-size: 14px;
+  cursor: pointer;
 `;
 
 export default function Products() {
@@ -134,9 +120,6 @@ export default function Products() {
     setCurrentSize(() => name);
   };
 
-  const [quantity, setQuantity] = useState(1);
-
-  const router = useRouter();
   const onClickCart = () => {
     if (!currentSize) {
       alert("사이즈를 선택하지 않았습니다");
@@ -157,12 +140,12 @@ export default function Products() {
       name: product.name,
       price: product.price,
       currentSize: [currentSize],
-      quantity: quantity,
+      quantity: 1,
+      description: product.description,
     };
     addItem(newProduct);
-    router.reload();
+    setCurrentSize();
   };
-  const onClickScrap = () => {};
 
   if (!product) return;
   return (
@@ -211,21 +194,7 @@ export default function Products() {
                 </SizeButton>
               ))}
             </div>
-
-            <div className="QuantityButtonWrapper">
-              {currentSize && (
-                <QuantityButton
-                  maxQuantity={3}
-                  removeItem={() => setCurrentSize(undefined)}
-                  quantity={quantity}
-                  setQuantity={setQuantity}
-                />
-              )}
-            </div>
             <div className="BottomBar">
-              <button className="ScrapBtn" onClick={onClickScrap}>
-                scrap
-              </button>
               <CartButton
                 className="CartBtn"
                 isActivated={currentSize ? true : false}
@@ -234,6 +203,18 @@ export default function Products() {
                 cart
               </CartButton>
             </div>
+            <p className="Description">
+              제품설명...Lorem Ipsum is simply dummy text of the printing and
+              typesetting industry. Lorem Ipsum has been the industrys standard
+              dummy text ever since the 1500s, when an unknown printer took a
+              galley of type and scrambled it to make a type specimen book. It
+              has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
           </div>
         </ProductsBlock>
       </AppLayout>

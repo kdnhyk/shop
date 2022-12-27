@@ -9,6 +9,7 @@ export const getProducts = (id?: string | string[]) => {
       name: "Fxcking Cap",
       price: 63000,
       currentSize: ["os"],
+      description: ""
     },
     {
       id: "1",
@@ -16,6 +17,7 @@ export const getProducts = (id?: string | string[]) => {
       name: "XT-6 GTX Utility - Black/Ebony/Marmalade",
       price: 280000,
       currentSize: ["285", "290"],
+      description: ""
     },
     {
       id: "2",
@@ -23,6 +25,7 @@ export const getProducts = (id?: string | string[]) => {
       name: "Splat Cuff Beanie - Black/Purple",
       price: 36400,
       currentSize: ["os"],
+      description: ""
     },
     {
       id: "3",
@@ -30,6 +33,7 @@ export const getProducts = (id?: string | string[]) => {
       name: "Odd Bear Keyring - Pink",
       price: 56000,
       currentSize: ["os"],
+      description: ""
     },
   ];
   if (id) {

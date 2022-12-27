@@ -1,5 +1,9 @@
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import useCart from "../../hooks/useCart";
+import { cartSelector } from "../../store/cart";
 import ProductInCart from "./ProductInCart";
 
 const CartModalBlock = styled.div`
@@ -62,7 +66,15 @@ interface IsCartModal {
 }
 
 export default function CartModal({ closeCart }: IsCartModal) {
-  const { cart } = useCart();
+  const [cart] = useRecoilState(cartSelector);
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    let result = 0;
+    cart.map((item) => {
+      result += item.price * item.quantity;
+    });
+    setTotal(result);
+  }, [cart]);
 
   return (
     <CartModalBlock>
@@ -85,15 +97,22 @@ export default function CartModal({ closeCart }: IsCartModal) {
                   name={product.name}
                   price={product.price}
                   currentSize={product.currentSize}
+                  description={product.description}
                 />
               );
             })}
             <div className="CartFooter">
               <p className="TotalPrice">
                 <span>Total</span>
-                <span>?0,000</span>
+                <span>
+                  {total.toLocaleString("ko-KR", {
+                    maximumFractionDigits: 4,
+                  }) + " 원"}
+                </span>
               </p>
-              <button className="CheckOutButton">Check out</button>
+              <Link href={"/checkout"}>
+                <button className="CheckOutButton">Check out</button>
+              </Link>
             </div>
           </>
         ) : (

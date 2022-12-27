@@ -64,7 +64,7 @@ export default function ProductInCart({
   const { removeItem, updateQuantity } = useCart();
   useEffect(() => {
     updateQuantity(id, currentQuantity);
-  }, [currentQuantity, id, updateQuantity]);
+  }, [currentQuantity]);
 
   return (
     <ProductInCartBlock>
@@ -85,7 +85,7 @@ export default function ProductInCart({
         <div className="QuantityAndPrice">
           <QuantityButton
             maxQuantity={3}
-            removeItem={() => removeItem(id)}
+            removeItem={() => removeItem(id, currentSize)}
             quantity={currentQuantity}
             setQuantity={setcurrnetQuantity}
           />

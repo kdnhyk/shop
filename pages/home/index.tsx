@@ -40,7 +40,7 @@ export default function Home() {
     <HomeBlock>
       <NavBar />
       <div className="ProductWrapper">
-        {products?.map((product: any) => (
+        {products?.map((product: IsProduct) => (
           <Product
             key={product.id}
             id={product.id}
@@ -48,6 +48,7 @@ export default function Home() {
             name={product.name}
             price={product.price}
             currentSize={[]}
+            description={product.description}
           />
         ))}
       </div>

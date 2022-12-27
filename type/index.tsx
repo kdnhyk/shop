@@ -6,6 +6,7 @@ export interface IsProduct {
   name: string;
   price: number;
   currentSize: IsSize[];
+  description: string;
 }
 
 export interface IsProductInCart extends IsProduct {
