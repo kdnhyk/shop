@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import useCart from "../../hooks/useCart";
-import { IsProductInCart } from "../../type";
 import CartModal from "../common/CartModal";
 import Header from "../common/Header";
 import NavModal from "../common/NavModal";

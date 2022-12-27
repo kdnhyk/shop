@@ -23,7 +23,7 @@ export const cartState = atom<IsProductInCart[]>({
 });
 
 export const cartSelector = selector<IsProductInCart[]>({
-  key: "selectAuth",
+  key: "cartSelector",
   get: ({ get }) => {
     const originalState = get(cartState);
     console.log(originalState);

@@ -1,31 +1,12 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import AppLayout from "../../components/layout/AppLayout";
-import { useRouter } from "next/router";
-import { authSelector } from "../../store/auth";
-import { useRecoilState } from "recoil";
 
-interface IsLoginBlock {}
+interface IsAccountBlock {}
 
-const LoginBlock = styled.div<IsLoginBlock>``;
+const AccountBlock = styled.div<IsAccountBlock>``;
 
-export default function Login() {
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (window.location.href.includes("access_token")) {
-  //     window.localStorage.setItem(
-  //       "token",
-  //       window.location.href.split("=")[1].split("&")[0] ?? "none"
-  //     );
-  //     router.push("/");
-  //   }
-  // }, []);
-
-  const [a, b] = useRecoilState(authSelector);
-  console.log(a);
-
+export default function Account() {
   return (
     <>
       <Head>
@@ -34,7 +15,7 @@ export default function Login() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout>
-        <LoginBlock></LoginBlock>
+        <AccountBlock></AccountBlock>
       </AppLayout>
     </>
   );

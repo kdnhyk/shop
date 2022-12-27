@@ -113,7 +113,7 @@ export default function Products() {
     fetchProduct();
   }, [id]);
 
-  const [currentSize, setCurrentSize] = useState<IsSize>();
+  const [currentSize, setCurrentSize] = useState<IsSize | null>(null);
   const onClickSizeBtn = (e: any) => {
     const { name } = e.target;
     console.log(name);
@@ -144,7 +144,7 @@ export default function Products() {
       description: product.description,
     };
     addItem(newProduct);
-    setCurrentSize(undefined);
+    setCurrentSize(null);
   };
 
   if (!product) return;

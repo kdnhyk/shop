@@ -10,7 +10,7 @@ export const authState = atom<IsAuth>({
 });
 
 export const authSelector = selector<IsAuth>({
-  key: "selectAuth",
+  key: "authSelector",
   get: ({ get }) => {
     const originalState = get(authState);
     return originalState;

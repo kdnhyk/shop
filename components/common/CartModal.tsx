@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import useCart from "../../hooks/useCart";
 import { cartSelector } from "../../store/cart";
 import ProductInCart from "./ProductInCart";
 
@@ -67,6 +66,7 @@ interface IsCartModal {
 
 export default function CartModal({ closeCart }: IsCartModal) {
   const [cart] = useRecoilState(cartSelector);
+  console.log(cart);
   const [total, setTotal] = useState(0);
   useEffect(() => {
     let result = 0;
@@ -87,6 +87,7 @@ export default function CartModal({ closeCart }: IsCartModal) {
       <div className="Cart">
         {cart.length !== 0 ? (
           <>
+            {console.log(cart)}
             {cart.map((product) => {
               return (
                 <ProductInCart
