@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { cartSelector } from "../../store/cart";
+import { IsProductInCart } from "../../type";
 import NavModal from "./NavModal";
 
 interface IsHeaderBlock {}
@@ -31,10 +32,10 @@ const HeaderBlock = styled.header<IsHeaderBlock>`
 interface IsHeader extends IsHeaderBlock {
   openNav: () => void;
   openCart: () => void;
+  cart: IsProductInCart[];
 }
 
-export default function Header({ openNav, openCart }: IsHeader) {
-  const [cart] = useRecoilState(cartSelector);
+export default function Header({ openNav, openCart, cart }: IsHeader) {
   return (
     <HeaderBlock>
       <div className="BurgerArea" onClick={openNav}>

@@ -118,6 +118,8 @@ export default function Products() {
     console.log(name);
     setCurrentSize(() => name);
   };
+
+  const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useRecoilState(cartSelector);
   const router = useRouter();
   const onClickCart = () => {
@@ -140,7 +142,7 @@ export default function Products() {
       name: product.name,
       price: product.price,
       currentSize: [currentSize],
-      quantity: 1,
+      quantity: quantity,
     };
     localStorage.setItem("cart", JSON.stringify([...cart, newProduct]));
     router.reload();
@@ -197,6 +199,8 @@ export default function Products() {
               <QuantityButton
                 maxQuantity={3}
                 removeItem={() => setCurrentSize(undefined)}
+                quantity={quantity}
+                setQuantity={setQuantity}
               />
             )}
           </div>

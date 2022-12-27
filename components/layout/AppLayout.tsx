@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { IsProductInCart } from "../../type";
 import CartModal from "../common/CartModal";
 import Header from "../common/Header";
 import NavModal from "../common/NavModal";
@@ -45,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     setIsOpenNav((prev) => !prev);
   };
   const [isOpenCart, setIsOpenCart] = useState(false);
-  const setCart = () => {
+  const onChangeCart = () => {
     setIsOpenCart((prev) => !prev);
   };
   const closeModal = () => {
@@ -54,17 +55,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       setIsOpenCart(false);
     }
   };
+
+  const [cart, setCart] = useState<IsProductInCart[]>([]);
+  useEffect(() => {
+    const localCart = localStorage.getItem("cart");
+    if (localCart === null) return;
+    setCart(JSON.parse(localCart));
+  }, [cart]);
+
   return (
     <AppLayoutBlock vh={vh} isOpenNav={isOpenNav} isOpenCart={isOpenCart}>
       <div className="NavModalWrapper">
         <NavModal />
       </div>
       <main className="Main" onClick={closeModal}>
-        <Header openNav={setNav} openCart={setCart} />
+        <Header openNav={setNav} openCart={onChangeCart} cart={cart} />
         <div className="Wrapper">{children}</div>
       </main>
       <div className="CartModalWrapper">
-        <CartModal closeCart={setCart} />
+        <CartModal closeCart={onChangeCart} cart={cart} setCart={setCart} />
       </div>
     </AppLayoutBlock>
   );

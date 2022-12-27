@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction } from "react";
 import styled from "styled-components";
 
 const QuantityButtonBlock = styled.div`
@@ -25,12 +25,15 @@ const QuantityButtonBlock = styled.div`
 interface IsQuantityButton {
   maxQuantity: number;
   removeItem: () => void;
+  quantity: number;
+  setQuantity: React.Dispatch<SetStateAction<number>>;
 }
 export default function QuantityButton({
   maxQuantity,
   removeItem,
+  quantity,
+  setQuantity,
 }: IsQuantityButton) {
-  const [quantity, setQuantity] = useState(1);
   const onDecrease = () => {
     if (quantity <= 1) {
       removeItem();
