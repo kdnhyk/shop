@@ -144,7 +144,7 @@ export default function Products() {
       description: product.description,
     };
     addItem(newProduct);
-    setCurrentSize();
+    setCurrentSize(undefined);
   };
 
   if (!product) return;
