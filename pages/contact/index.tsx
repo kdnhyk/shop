@@ -2,11 +2,11 @@ import Head from "next/head";
 import styled from "styled-components";
 import AppLayout from "../../components/layout/AppLayout";
 
-interface IsAccountBlock {}
+interface IsAboutBlock {}
 
-const AccountBlock = styled.div<IsAccountBlock>``;
+const AboutBlock = styled.div<IsAboutBlock>``;
 
-export default function Account() {
+export default function About() {
   return (
     <>
       <Head>
@@ -15,9 +15,9 @@ export default function Account() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout>
-        <AccountBlock>
-          <h1>Account</h1>
-        </AccountBlock>
+        <AboutBlock>
+          <h1>Contact</h1>
+        </AboutBlock>
       </AppLayout>
     </>
   );

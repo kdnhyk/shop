@@ -3,15 +3,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useCart from "../../hooks/useCart";
-import { IsProductInCart } from "../../type";
+import { IsProductInCart } from "../../types";
 import QuantityButton from "./QuantityButton";
 
 const ProductInCartBlock = styled.div`
   display: flex;
   flex-direction: row;
   gap: 15px;
-  padding: 0 0 15px 0;
-  border-bottom: 1px solid black;
+  padding: 15px 0 0 0;
+  border-top: 1px solid black;
   a {
     .ImageWrapper {
       width: 70px;
@@ -54,7 +54,7 @@ const ProductInCartBlock = styled.div`
 interface IsProductInCartProps extends IsProductInCart {}
 export default function ProductInCart({
   id,
-  src,
+  images,
   name,
   price,
   currentSize,
@@ -70,7 +70,7 @@ export default function ProductInCart({
     <ProductInCartBlock>
       <Link href={`/products/${id}`}>
         <div className="ImageWrapper">
-          <Image alt={name} src={src} width={70} height={70}></Image>
+          <Image alt={name} src={images[0].src} width={70} height={70}></Image>
         </div>
       </Link>
       <div className="InfoWrapper">

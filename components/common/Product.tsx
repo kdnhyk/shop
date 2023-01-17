@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { IsProduct } from "../../type";
+import { IsProduct } from "../../types";
 
 const ProductBlock = styled.div`
   a {
@@ -27,12 +27,17 @@ const ProductBlock = styled.div`
   }
 `;
 
-export default function Product({ id, src, name, price }: IsProduct) {
+export default function Product({ id, images, name, price }: IsProduct) {
   return (
     <ProductBlock>
       <Link href={`/products/${id}`}>
         <div className="ImageWrapper">
-          <Image alt={name} src={src} width={200} height={200}></Image>
+          <Image
+            alt={name}
+            src={images[0].src}
+            width={200}
+            height={200}
+          ></Image>
         </div>
         <div className="InfoWrapper">
           <p>{name}</p>

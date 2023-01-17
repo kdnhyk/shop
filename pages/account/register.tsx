@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import AppLayout from "../../components/layout/AppLayout";
 import NaverLogin from "../../components/common/NaverLogin";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getProviders, signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 interface IsLoginBlock {}
 
@@ -49,21 +49,8 @@ const LoginBlock = styled.div<IsLoginBlock>`
 
 export default function Login() {
   const router = useRouter();
-  const [providers, setProviders] = useState({});
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    getProviders().then((res) => setProviders(res));
-  }, []);
-
-  useEffect(() => {
-    if (session) {
-      router.push("/");
-    }
-  }, [router, session]);
-
   const [loginInput, setLoginInput] = useState({
-    id: "",
+    email: "",
     password: "",
   });
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,16 +58,9 @@ export default function Login() {
     console.log(name + ": " + value);
     setLoginInput({ ...loginInput, [name]: value });
   };
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { id, password } = loginInput;
-    const response = await signIn("Credentials", {
-      id,
-      password,
-      redirect: false,
-    });
-    console.log(response);
-    // router.push("/account");
+    router.push("/account");
   };
   return (
     <>
@@ -91,13 +71,13 @@ export default function Login() {
       </Head>
       <AppLayout>
         <LoginBlock>
-          <h1>Login</h1>
+          <h1>Create Account</h1>
           <form className="LoginForm" onSubmit={onSubmit}>
             <input
-              type="text"
-              name="id"
-              placeholder="ID"
-              value={loginInput.id}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={loginInput.email}
               onChange={handleInput}
             ></input>
             <input
@@ -107,18 +87,8 @@ export default function Login() {
               value={loginInput.password}
               onChange={handleInput}
             ></input>
-            <button>SIGN IN</button>
+            <button>SIGN UP</button>
           </form>
-          <div className="LoginMenuWrapper">
-            <Link href={`/account/register`}>Create Accout</Link>
-            <Link href={`/account`}>Forgot your password?</Link>
-          </div>
-          <div className="SNSLoginWrapper">
-            <NaverLogin />
-            <button onClick={() => signIn("google")}>Google</button>
-            <button onClick={() => signIn("kakao")}>Kakao</button>
-            <button onClick={() => signIn("naver")}>Naver</button>
-          </div>
         </LoginBlock>
       </AppLayout>
     </>

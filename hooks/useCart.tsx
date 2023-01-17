@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { cartSelector } from "../store/cart";
-import { IsProductInCart } from "../type";
+import { IsProductInCart } from "../types";
 
 export default function useCart() {
   const [cart, setCart] = useRecoilState<IsProductInCart[]>(cartSelector);

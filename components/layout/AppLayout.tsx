@@ -30,6 +30,8 @@ const AppLayoutBlock = styled.div<IsAppLayoutBlock>`
     .Wrapper {
       width: 100vw;
       padding: 15px;
+      display: flex;
+      justify-content: center;
     }
     .Blur {
       position: absolute;

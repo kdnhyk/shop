@@ -1,12 +1,17 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import AppLayout from "../../components/layout/AppLayout";
 
-interface IsAccountBlock {}
+interface IsAboutBlock {}
 
-const AccountBlock = styled.div<IsAccountBlock>``;
+const AboutBlock = styled.div<IsAboutBlock>`
+  width: 100%;
+`;
 
-export default function Account() {
+export default function About() {
+  const { sort } = useRouter().query;
+
   return (
     <>
       <Head>
@@ -15,9 +20,9 @@ export default function Account() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout>
-        <AccountBlock>
-          <h1>Account</h1>
-        </AccountBlock>
+        <AboutBlock>
+          <h1>{sort}</h1>
+        </AboutBlock>
       </AppLayout>
     </>
   );

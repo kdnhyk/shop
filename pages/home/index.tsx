@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NavBar from "../../components/common/NavBar";
 import Product from "../../components/common/Product";
-import { IsProduct } from "../../type";
+import { IsProduct } from "../../types";
 
 const HomeBlock = styled.div`
   height: 100%;
+  width: 100%;
   .ProductWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -44,7 +45,7 @@ export default function Home() {
           <Product
             key={product.id}
             id={product.id}
-            src={product.src}
+            images={product.images}
             name={product.name}
             price={product.price}
             currentSize={[]}

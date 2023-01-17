@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-import { IsProductInCart } from "../type";
+import { IsProductInCart } from "../types";
 
 // const localStorageEffect =
 //   (key: string) =>

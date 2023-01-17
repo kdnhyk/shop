@@ -14,7 +14,6 @@ const CartModalBlock = styled.div`
   .Header {
     width: 270px;
     height: 80px;
-    border-bottom: 1px solid black;
     padding: 15px 0;
     display: flex;
     align-items: center;
@@ -29,14 +28,31 @@ const CartModalBlock = styled.div`
     }
   }
   .Cart {
-    padding: 15px 0 0 0;
+    height: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    .CartMain {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: auto;
+      max-height: calc(100% - 112px);
+      overflow-y: auto;
+      /* &::-webkit-scrollbar {
+        display: none;
+      } */
+    }
     .CartFooter {
+      width: 100%;
+      /* position: absolute;
+      bottom: 20px; */
       display: flex;
       flex-direction: column;
       gap: 12px;
+      border-top: 1px solid black;
+      padding-top: 12px;
       .TotalPrice {
         display: flex;
         justify-content: space-between;
@@ -56,6 +72,8 @@ const CartModalBlock = styled.div`
     }
 
     .EmptyText {
+      padding-top: 15px;
+      border-top: 1px solid black;
     }
   }
 `;
@@ -66,7 +84,6 @@ interface IsCartModal {
 
 export default function CartModal({ closeCart }: IsCartModal) {
   const [cart] = useRecoilState(cartSelector);
-  console.log(cart);
   const [total, setTotal] = useState(0);
   useEffect(() => {
     let result = 0;
@@ -87,21 +104,23 @@ export default function CartModal({ closeCart }: IsCartModal) {
       <div className="Cart">
         {cart.length !== 0 ? (
           <>
-            {console.log(cart)}
-            {cart.map((product) => {
-              return (
-                <ProductInCart
-                  key={product.id + product.currentSize[0]}
-                  id={product.id}
-                  quantity={product.quantity}
-                  src={product.src}
-                  name={product.name}
-                  price={product.price}
-                  currentSize={product.currentSize}
-                  description={product.description}
-                />
-              );
-            })}
+            <div className="CartMain">
+              {cart.map((product) => {
+                return (
+                  <ProductInCart
+                    key={product.id + product.currentSize[0]}
+                    id={product.id}
+                    quantity={product.quantity}
+                    images={product.images}
+                    name={product.name}
+                    price={product.price}
+                    currentSize={product.currentSize}
+                    description={product.description}
+                  />
+                );
+              })}
+            </div>
+
             <div className="CartFooter">
               <p className="TotalPrice">
                 <span>Total</span>

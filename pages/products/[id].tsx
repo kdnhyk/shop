@@ -3,10 +3,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Carousel from "../../components/common/Carousel";
 import AppLayout from "../../components/layout/AppLayout";
 import useCart from "../../hooks/useCart";
-import { IsProduct } from "../../type";
-import { IsSize, IsProductInCart } from "../../type";
+import { IsProduct } from "../../types";
+import { IsSize, IsProductInCart } from "../../types";
 
 const ProductsBlock = styled.div`
   display: flex;
@@ -136,7 +137,7 @@ export default function Products() {
     }
     const newProduct: IsProductInCart = {
       id: product.id,
-      src: product.src,
+      images: product.images,
       name: product.name,
       price: product.price,
       currentSize: [currentSize],
@@ -164,12 +165,13 @@ export default function Products() {
             </div>
 
             <div className="ImageWrapper">
-              <Image
+              <Carousel images={product.images} />
+              {/* <Image
                 alt={product.name}
-                src={product.src}
+                src={product.images[0].src}
                 width={400}
                 height={400}
-              ></Image>
+              ></Image> */}
             </div>
           </div>
           <div className="RightArea">
